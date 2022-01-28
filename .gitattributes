@@ -1,4 +1,4 @@
 # Auto detect text files and perform LF normalization
 # * text=auto
 #*.*	working-tree-encoding=CP1251	eol=CRLF
-*.txt filter=wincp1251
+*.ahk filter=wincp1251
