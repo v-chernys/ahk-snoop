@@ -1,7 +1,4 @@
 # Auto detect text files and perform LF normalization
 # * text=auto
 #*.*	working-tree-encoding=CP1251	eol=CRLF
-[filter "wincp1251"]
-        clean = iconv -f windows-1251 -t utf-8
-        smudge = iconv -f utf-8 -t windows-1251
-        required
+*.txt filter=wincp1251
