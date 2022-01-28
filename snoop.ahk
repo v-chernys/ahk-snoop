@@ -1,8 +1,8 @@
-; 2018-12-10, В.Чернышёв
+; 2018-12-10, Р’.Р§РµСЂРЅС‹С€С‘РІ
 ; SNOOP
-; подмена неправильно введенных символов (если забыл переключить раскладку клавиатуры)
-; оригинальная реализация - в утилите "Опечатка by Dr. Golomin"
-; утилитой пользовался примерно 18 лет (2001-2018), за что очень благодарен автору, Евгению Голомину
+; РїРѕРґРјРµРЅР° РЅРµРїСЂР°РІРёР»СЊРЅРѕ РІРІРµРґРµРЅРЅС‹С… СЃРёРјРІРѕР»РѕРІ (РµСЃР»Рё Р·Р°Р±С‹Р» РїРµСЂРµРєР»СЋС‡РёС‚СЊ СЂР°СЃРєР»Р°РґРєСѓ РєР»Р°РІРёР°С‚СѓСЂС‹)
+; РѕСЂРёРіРёРЅР°Р»СЊРЅР°СЏ СЂРµР°Р»РёР·Р°С†РёСЏ - РІ СѓС‚РёР»РёС‚Рµ "РћРїРµС‡Р°С‚РєР° by Dr. Golomin"
+; СѓС‚РёР»РёС‚РѕР№ РїРѕР»СЊР·РѕРІР°Р»СЃСЏ РїСЂРёРјРµСЂРЅРѕ 18 Р»РµС‚ (2001-2018), Р·Р° С‡С‚Рѕ РѕС‡РµРЅСЊ Р±Р»Р°РіРѕРґР°СЂРµРЅ Р°РІС‚РѕСЂСѓ, Р•РІРіРµРЅРёСЋ Р“РѕР»РѕРјРёРЅСѓ
 
 #SingleInstance force
 #NoEnv  ; Recommended for performance and compatibility with future AutoHotkey releases.
@@ -10,7 +10,6 @@
 SendMode Input  ; Recommended for new scripts due to its superior speed and reliability.
 SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 StringCaseSense, On
- 
  
 Break::
 ;2020-04-08 #Break::	; 2020-04-03
@@ -20,35 +19,35 @@ Break::
    Clipboard =
    SendInput, ^{vk43}				; Ctrl + C
    ClipWait, 0
-   новый := ""
+   РЅРѕРІС‹Р№ := ""
    Loop, parse, clipboard
    { 
-	з:=eng_rus(A_LoopField)
-	новый:= новый з
+	Р·:=eng_rus(A_LoopField)
+	РЅРѕРІС‹Р№:= РЅРѕРІС‹Р№ Р·
    }
-; если нет выделенного текста, то просто сменить раскладку  
-; MsgBox % новый
-  if !StrLen(новый) then
+; РµСЃР»Рё РЅРµС‚ РІС‹РґРµР»РµРЅРЅРѕРіРѕ С‚РµРєСЃС‚Р°, С‚Рѕ РїСЂРѕСЃС‚Рѕ СЃРјРµРЅРёС‚СЊ СЂР°СЃРєР»Р°РґРєСѓ  
+; MsgBox % РЅРѕРІС‹Р№
+  if !StrLen(РЅРѕРІС‹Р№) then
   {
-		поменять_раскладку()
+		РїРѕРјРµРЅСЏС‚СЊ_СЂР°СЃРєР»Р°РґРєСѓ()
 		Clipboard := TempClipboard 			; pop
 		exit 
   }
 		
 	
-;  переключить в нужную раскладку по первому символу	
-   кириллица := "йцукенгшщзхъфывапролджэячсмитьбюё№"
-   первый := SubStr(новый,1,1)
-   место := InStr(кириллица, первый, CaseSensitive := false)
-   if место then 
+;  РїРµСЂРµРєР»СЋС‡РёС‚СЊ РІ РЅСѓР¶РЅСѓСЋ СЂР°СЃРєР»Р°РґРєСѓ РїРѕ РїРµСЂРІРѕРјСѓ СЃРёРјРІРѕР»Сѓ	
+   РєРёСЂРёР»Р»РёС†Р° := "Р№С†СѓРєРµРЅРіС€С‰Р·С…СЉС„С‹РІР°РїСЂРѕР»РґР¶СЌСЏС‡СЃРјРёС‚СЊР±СЋС‘в„–"
+   РїРµСЂРІС‹Р№ := SubStr(РЅРѕРІС‹Р№,1,1)
+   РјРµСЃС‚Рѕ := InStr(РєРёСЂРёР»Р»РёС†Р°, РїРµСЂРІС‹Р№, CaseSensitive := false)
+   if РјРµСЃС‚Рѕ then 
 	SendMessage, 0x50,, 0x4190419,, A	; RU-RU
-   if !место then 
+   if !РјРµСЃС‚Рѕ then 
 	SendMessage, 0x50,, 0x4090409,, A	; EN-EN
    Sleep, 200
 
-;  Send,%новый% ; так почему-то не подменяет № на #
-;  заменяю 
-   Clipboard := новый
+;  Send,%РЅРѕРІС‹Р№% ; С‚Р°Рє РїРѕС‡РµРјСѓ-С‚Рѕ РЅРµ РїРѕРґРјРµРЅСЏРµС‚ в„– РЅР° #
+;  Р·Р°РјРµРЅСЏСЋ 
+   Clipboard := РЅРѕРІС‹Р№
    SendInput, ^{vk56}				; Ctrl + v
    ClipWait, 0
    Sleep, 200
@@ -64,14 +63,14 @@ ScrollLock::	; 2019-01-18
 	Clipboard =
 	SendInput, ^{vk43}			; Ctrl + C
 	ClipWait, 0
-	новый := ""
+	РЅРѕРІС‹Р№ := ""
 	Loop, parse, clipboard
 	{ 
-		з:=сменить_регистр(A_LoopField)
-		новый:= новый з
+		Р·:=СЃРјРµРЅРёС‚СЊ_СЂРµРіРёСЃС‚СЂ(A_LoopField)
+		РЅРѕРІС‹Р№:= РЅРѕРІС‹Р№ Р·
 	}
-;	переключить_КАПС_ЛОК()
-	Clipboard := новый
+;	РїРµСЂРµРєР»СЋС‡РёС‚СЊ_РљРђРџРЎ_Р›РћРљ()
+	Clipboard := РЅРѕРІС‹Р№
 	SendInput, ^{vk56}			; Ctrl + v
 	ClipWait, 0
    Sleep, 200
@@ -86,19 +85,19 @@ NumpadAdd::
 	Clipboard =
 	SendInput, ^{vk43}			; Ctrl + C
 	ClipWait, 0
-	новый := ""
+	РЅРѕРІС‹Р№ := ""
 	Loop, parse, clipboard
 	{ 
-		з:=верхний_регистр(A_LoopField)
-		новый:= новый з
+		Р·:=РІРµСЂС…РЅРёР№_СЂРµРіРёСЃС‚СЂ(A_LoopField)
+		РЅРѕРІС‹Р№:= РЅРѕРІС‹Р№ Р·
 	}
-	Clipboard := новый
+	Clipboard := РЅРѕРІС‹Р№
 	SendInput, ^{vk56}			; Ctrl + v
 	ClipWait, 0
 	Sleep, 200
 	Clipboard := TempClipboard 		; pop
 ;	MsgBox, 1
-	установить_КАПС_ЛОК(True)
+	СѓСЃС‚Р°РЅРѕРІРёС‚СЊ_РљРђРџРЎ_Р›РћРљ(True)
 	return
 }
 NumpadSub::
@@ -109,37 +108,37 @@ NumpadSub::
 	Clipboard =
 	SendInput, ^{vk43}			; Ctrl + C
 	ClipWait, 0
-	новый := ""
+	РЅРѕРІС‹Р№ := ""
 	Loop, parse, clipboard
 	{ 
-		з:=нижний_регистр(A_LoopField)
-		новый:= новый з
+		Р·:=РЅРёР¶РЅРёР№_СЂРµРіРёСЃС‚СЂ(A_LoopField)
+		РЅРѕРІС‹Р№:= РЅРѕРІС‹Р№ Р·
 	}
-	Clipboard := новый
+	Clipboard := РЅРѕРІС‹Р№
 	SendInput, ^{vk56}			; Ctrl + v
 	ClipWait, 0
 	Sleep, 200
 	Clipboard := TempClipboard 		; pop
 ;	MsgBox, 0
-	установить_КАПС_ЛОК(False)
+	СѓСЃС‚Р°РЅРѕРІРёС‚СЊ_РљРђРџРЎ_Р›РћРљ(False)
 
 	return
 }
 NumpadDiv::
-!+sc02B:: ; AltShift\ при любой раскладке 2019-09-09
-;^+sc02B:: ; CtrlShift\ при любой раскладке 2019-09-09
+!+sc02B:: ; AltShift\ РїСЂРё Р»СЋР±РѕР№ СЂР°СЃРєР»Р°РґРєРµ 2019-09-09
+;^+sc02B:: ; CtrlShift\ РїСЂРё Р»СЋР±РѕР№ СЂР°СЃРєР»Р°РґРєРµ 2019-09-09
 {
 	TempClipboard := ClipboardAll		; push
 	Clipboard =
 	SendInput, ^{vk43}			; Ctrl + C
 	ClipWait, 0
-	новый := ""
+	РЅРѕРІС‹Р№ := ""
 	Loop, parse, clipboard
 	{ 
-		з:=слеш_бэкслеш(A_LoopField)
-		новый:= новый з
+		Р·:=СЃР»РµС€_Р±СЌРєСЃР»РµС€(A_LoopField)
+		РЅРѕРІС‹Р№:= РЅРѕРІС‹Р№ Р·
 	}
-	Clipboard := новый
+	Clipboard := РЅРѕРІС‹Р№
 	SendInput, ^{vk56}			; Ctrl + v
 	ClipWait, 0
    Sleep, 200
@@ -147,94 +146,94 @@ NumpadDiv::
 	return
 }
 NumpadMult::
-!+sc01B:: ; AltShift] при любой раскладке 2019-09-09
-;^+sc01B:: ; CtrlShift] при любой раскладке 2019-09-09
+!+sc01B:: ; AltShift] РїСЂРё Р»СЋР±РѕР№ СЂР°СЃРєР»Р°РґРєРµ 2019-09-09
+;^+sc01B:: ; CtrlShift] РїСЂРё Р»СЋР±РѕР№ СЂР°СЃРєР»Р°РґРєРµ 2019-09-09
 {
 	TempClipboard := ClipboardAll		; push
 	Clipboard =
 	SendInput, ^{vk43}			; Ctrl + C
 	ClipWait, 0
-	новый := ""
+	РЅРѕРІС‹Р№ := ""
 	Loop, parse, clipboard
 	{ 
-		з:=убрать_квадратные_скобки(A_LoopField)
-		новый:= новый з
+		Р·:=СѓР±СЂР°С‚СЊ_РєРІР°РґСЂР°С‚РЅС‹Рµ_СЃРєРѕР±РєРё(A_LoopField)
+		РЅРѕРІС‹Р№:= РЅРѕРІС‹Р№ Р·
 	}
-	Clipboard := новый
+	Clipboard := РЅРѕРІС‹Р№
 	SendInput, ^{vk56}			; Ctrl + v
 	ClipWait, 0
    Sleep, 200
 	Clipboard := TempClipboard 		; pop
 	return
 }
-eng_rus(символ)
+eng_rus(СЃРёРјРІРѕР»)
 {
 
 static f := "QWERTYUIOP{}ASDFGHJKL:""|ZXCVBNM<>?qwertyuiop[]asdfghjkl;'\zxcvbnm,./``~!@#$`%^&"
-static g := "ЙЦУКЕНГШЩЗХЪФЫВАПРОЛДЖЭ/ЯЧСМИТЬБЮ,йцукенгшщзхъфывапролджэ\ячсмитьбю.ёЁ!""№;`%:?"
+static g := "Р™Р¦РЈРљР•РќР“РЁР©Р—РҐРЄР¤Р«Р’РђРџР РћР›Р”Р–Р­/РЇР§РЎРњРРўР¬Р‘Р®,Р№С†СѓРєРµРЅРіС€С‰Р·С…СЉС„С‹РІР°РїСЂРѕР»РґР¶СЌ\СЏС‡СЃРјРёС‚СЊР±СЋ.С‘РЃ!""в„–;`%:?"
 ff = %f%%g%
 gg = %g%%f%
-место := InStr(ff, символ, CaseSensitive := true)
-if место then
+РјРµСЃС‚Рѕ := InStr(ff, СЃРёРјРІРѕР», CaseSensitive := true)
+if РјРµСЃС‚Рѕ then
 {
-;возврат := SubStr(gg,место,1)
-;MsgBox %место% %возврат% 
-	return % SubStr(gg,место,1)
+;РІРѕР·РІСЂР°С‚ := SubStr(gg,РјРµСЃС‚Рѕ,1)
+;MsgBox %РјРµСЃС‚Рѕ% %РІРѕР·РІСЂР°С‚% 
+	return % SubStr(gg,РјРµСЃС‚Рѕ,1)
 }
-return символ
+return СЃРёРјРІРѕР»
 }
 
-сменить_регистр(символ)
+СЃРјРµРЅРёС‚СЊ_СЂРµРіРёСЃС‚СЂ(СЃРёРјРІРѕР»)
 {
-static f := "йцукенгшщзхъфывапролджэячсмитьбюёqwertyuiopasdfghjklzxcvbnm"
-static g := "ЙЦУКЕНГШЩЗХЪФЫВАПРОЛДЖЭЯЧСМИТЬБЮЁQWERTYUIOPASDFGHJKLZXCVBNM"
+static f := "Р№С†СѓРєРµРЅРіС€С‰Р·С…СЉС„С‹РІР°РїСЂРѕР»РґР¶СЌСЏС‡СЃРјРёС‚СЊР±СЋС‘qwertyuiopasdfghjklzxcvbnm"
+static g := "Р™Р¦РЈРљР•РќР“РЁР©Р—РҐРЄР¤Р«Р’РђРџР РћР›Р”Р–Р­РЇР§РЎРњРРўР¬Р‘Р®РЃQWERTYUIOPASDFGHJKLZXCVBNM"
 ff = %f%%g%
 gg = %g%%f%
-место := InStr(ff, символ, CaseSensitive := true)
-if место then
-	return % SubStr(gg,место,1)
-return символ
+РјРµСЃС‚Рѕ := InStr(ff, СЃРёРјРІРѕР», CaseSensitive := true)
+if РјРµСЃС‚Рѕ then
+	return % SubStr(gg,РјРµСЃС‚Рѕ,1)
+return СЃРёРјРІРѕР»
 }
 
-верхний_регистр(символ)
+РІРµСЂС…РЅРёР№_СЂРµРіРёСЃС‚СЂ(СЃРёРјРІРѕР»)
 {
-static f := "йцукенгшщзхъфывапролджэячсмитьбюёqwertyuiopasdfghjklzxcvbnm"
-static g := "ЙЦУКЕНГШЩЗХЪФЫВАПРОЛДЖЭЯЧСМИТЬБЮЁQWERTYUIOPASDFGHJKLZXCVBNM"
-место := InStr(f, символ, CaseSensitive := true)
-if место then 
-	return % SubStr(g,место,1)
-return символ
+static f := "Р№С†СѓРєРµРЅРіС€С‰Р·С…СЉС„С‹РІР°РїСЂРѕР»РґР¶СЌСЏС‡СЃРјРёС‚СЊР±СЋС‘qwertyuiopasdfghjklzxcvbnm"
+static g := "Р™Р¦РЈРљР•РќР“РЁР©Р—РҐРЄР¤Р«Р’РђРџР РћР›Р”Р–Р­РЇР§РЎРњРРўР¬Р‘Р®РЃQWERTYUIOPASDFGHJKLZXCVBNM"
+РјРµСЃС‚Рѕ := InStr(f, СЃРёРјРІРѕР», CaseSensitive := true)
+if РјРµСЃС‚Рѕ then 
+	return % SubStr(g,РјРµСЃС‚Рѕ,1)
+return СЃРёРјРІРѕР»
 }
 
-нижний_регистр(символ)
+РЅРёР¶РЅРёР№_СЂРµРіРёСЃС‚СЂ(СЃРёРјРІРѕР»)
 {
-static f := "ЙЦУКЕНГШЩЗХЪФЫВАПРОЛДЖЭЯЧСМИТЬБЮЁQWERTYUIOPASDFGHJKLZXCVBNM"
-static g := "йцукенгшщзхъфывапролджэячсмитьбюёqwertyuiopasdfghjklzxcvbnm"
-место := InStr(f, символ, CaseSensitive := true)
-if место then 
-	return % SubStr(g,место,1)
-return символ
+static f := "Р™Р¦РЈРљР•РќР“РЁР©Р—РҐРЄР¤Р«Р’РђРџР РћР›Р”Р–Р­РЇР§РЎРњРРўР¬Р‘Р®РЃQWERTYUIOPASDFGHJKLZXCVBNM"
+static g := "Р№С†СѓРєРµРЅРіС€С‰Р·С…СЉС„С‹РІР°РїСЂРѕР»РґР¶СЌСЏС‡СЃРјРёС‚СЊР±СЋС‘qwertyuiopasdfghjklzxcvbnm"
+РјРµСЃС‚Рѕ := InStr(f, СЃРёРјРІРѕР», CaseSensitive := true)
+if РјРµСЃС‚Рѕ then 
+	return % SubStr(g,РјРµСЃС‚Рѕ,1)
+return СЃРёРјРІРѕР»
 }
 
-слеш_бэкслеш(символ)
+СЃР»РµС€_Р±СЌРєСЃР»РµС€(СЃРёРјРІРѕР»)
 {
 static f := "\/"
 static g := "/\"
-место := InStr(f, символ, CaseSensitive := true)
-if место then 
-	return % SubStr(g,место,1)
-return символ
+РјРµСЃС‚Рѕ := InStr(f, СЃРёРјРІРѕР», CaseSensitive := true)
+if РјРµСЃС‚Рѕ then 
+	return % SubStr(g,РјРµСЃС‚Рѕ,1)
+return СЃРёРјРІРѕР»
 }
-убрать_квадратные_скобки(символ)
+СѓР±СЂР°С‚СЊ_РєРІР°РґСЂР°С‚РЅС‹Рµ_СЃРєРѕР±РєРё(СЃРёРјРІРѕР»)
 {
 static f := "[]"
 static g := ""
-место := InStr(f, символ, CaseSensitive := true)
-if место then 
-	return % SubStr(g,место,1)
-return символ
+РјРµСЃС‚Рѕ := InStr(f, СЃРёРјРІРѕР», CaseSensitive := true)
+if РјРµСЃС‚Рѕ then 
+	return % SubStr(g,РјРµСЃС‚Рѕ,1)
+return СЃРёРјРІРѕР»
 }
-переключить_КАПС_ЛОК()	; 2019-02-14
+РїРµСЂРµРєР»СЋС‡РёС‚СЊ_РљРђРџРЎ_Р›РћРљ()	; 2019-02-14
 {
 	state := GetKeyState("CapsLock", "T")  ; 1 if CapsLock is ON, 0 otherwise.
 	if state = False 
@@ -244,18 +243,18 @@ return символ
 	Sleep, 200
 	return
 }
-установить_КАПС_ЛОК(да)	; 2019-02-14
+СѓСЃС‚Р°РЅРѕРІРёС‚СЊ_РљРђРџРЎ_Р›РћРљ(РґР°)	; 2019-02-14
 {
 ;	SLEEP, 1000
 
-;;;	уже := GetKeyState("CapsLock", "T")  ; 1 if capslock is ON, 0 otherwise.
-;	MsgBox, %уже% %да%
-;;;	if уже = да 
+;;;	СѓР¶Рµ := GetKeyState("CapsLock", "T")  ; 1 if capslock is ON, 0 otherwise.
+;	MsgBox, %СѓР¶Рµ% %РґР°%
+;;;	if СѓР¶Рµ = РґР° 
 ;;;		RETURN
 ;;	SetCapsLockState
 ;;	SetStoreCapsLockMode, On
 
-	if да = 1 
+	if РґР° = 1 
 ;		MsgBox 1
 		SetCapsLockState, On	
 	else 
@@ -264,14 +263,14 @@ return символ
 	return
 }
 
-поменять_раскладку() ; 2021-10-06
+РїРѕРјРµРЅСЏС‚СЊ_СЂР°СЃРєР»Р°РґРєСѓ() ; 2021-10-06
 { ; https://forum.script-coding.com/viewtopic.php?id=189
-  ;0xF2AFBF7 - что за раскладка?
+  ;0xF2AFBF7 - С‡С‚Рѕ Р·Р° СЂР°СЃРєР»Р°РґРєР°?
 
   SetFormat, Integer, H
   
-  Locale1=0x4090409  ; Английский (американский).
-  Locale2=0x4190419  ; Русский.
+  Locale1=0x4090409  ; РђРЅРіР»РёР№СЃРєРёР№ (Р°РјРµСЂРёРєР°РЅСЃРєРёР№).
+  Locale2=0x4190419  ; Р СѓСЃСЃРєРёР№.
   WinGet, WinID,, A
   ThreadID:=DllCall("GetWindowThreadProcessId", "Int", WinID, "Int", "0")
   InputLocaleID:=DllCall("GetKeyboardLayout", "Int", ThreadID)
