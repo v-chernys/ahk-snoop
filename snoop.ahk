@@ -11,6 +11,7 @@ SendMode Input  ; Recommended for new scripts due to its superior speed and reli
 SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 StringCaseSense, On
  
+ 
 Break::
 ;2020-04-08 #Break::	; 2020-04-03
 ;2020-04-08 ^+Backspace::   ; 2020-04-03
