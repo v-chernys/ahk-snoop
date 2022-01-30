@@ -30,7 +30,7 @@ first all uppercase characters are listed, then all lowercase characters;
 2. line `g` lists the symbols of the Russian layout in the same order.
 3. let us concatenate the first array to the second one (`fg=f+g`) and the second one to the first one (`gf=g+f`), then there will always be antagonist characters in the same places;
 therefore for recoding we look for the place of the replaced character in the first array `fg` and, using the obtained index, we get the replacement character from the second array `gf`.
-```ahk-script
+```AutoHotkey
 static f := "QWERTYUIOP{}ASDFGHJKL:""|ZXCVBNM<>?qwertyuiop[]asdfghjkl;'\zxcvbnm,./``~!@#$`%^&"
 static g := "ЙЦУКЕНГШЩЗХЪФЫВАПРОЛДЖЭ/ЯЧСМИТЬБЮ,йцукенгшщзхъфывапролджэ\ячсмитьбю.ёЁ!""№;`%:?"
 fg = %f%%g%
