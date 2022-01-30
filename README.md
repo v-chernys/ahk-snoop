@@ -1,5 +1,5 @@
 # Fixing keyboard layout switching errors (snoop)
-##Purpose
+## Purpose
 Sometimes programmers have to simultaneously use two keyboard layouts: English and Russian.
 (_I prefer to write comments in Russian. Also, where it is possible, I try to write code in Russian._)
 In tht case often it occures that a large piece of the entered text is in the wrong layout.
