@@ -1,4 +1,4 @@
-# Исправление ошибок переключения раскладок клавиатуры (snoop)
+# Fixing keyboard layout switching errors (snoop)
 ## Назначение
 Иногда программистам приходится активно использовать две раскладки клавиатуры: английскую и русскую. 
 (_Я предпочитаю писать комментарии по-русски. Также, где это возможно, стараюсь и код писать по-русски._)
@@ -7,43 +7,50 @@
 Для перекодировки достаточно выделить текст и нажать клавишу Break.
 Также есть дополнительные опции перекодировки выделенного текста (смена регистра и пр.). Вот полный список преобразований:
 
-| сочетание | действие |
+##Purpose
+Sometimes programmers have to simultaneously use two keyboard layouts: English and Russian.
+(_I prefer to write comments in Russian. Also, where it is possible, I try to write code in Russian._)
+In tht case often it occures that a large piece of the entered text is in the wrong layout.
+The above script in the AutoHotKey language saves me a lot of time, because it allows me to quickly fix the layout of the selected text in any text editor.
+To convert the text from wrong layout just select the text and press the Break key.
+There are also additional options for transcoding the selected text (case change, etc.). Here is the complete list of transformations:
+
+| keyboard shortcut |action |
 | ----- | ----- |
-| Break | заменить все английские символы на кириллические, и наоборот |
-| Ctrl-Shift-PageUp | сменить регистр каждого символа на противоположный |
-| Win-PageUp | все символы - в верхний регистр |
-| Win-PageDown | все символы - в нижний регистр |
-| Alt-Shift-\\ | в тексте заменить все правые слеши (/) на левые (\\) |
-| Alt-Shift-] | в тексте убрать все квадратные скобки (\[ и \]) |
+| Break | replace all English characters with Cyrillic characters and vice versa |
+| Ctrl-Shift-PageUp | change the case of each character to the opposite |
+| Win-PageUp | all characters - uppercase |
+| Win-PageDown | all characters - to lowercase |
+| Alt-Shift-\\ | in the text, replace all right slashes (/) with left slashes (\\) |
+| Alt-Shift-] | remove all square brackets (\[ and \]) in the text |
 
-## История
-Оригинальная идея была мной подсмотрена в утилите "Опечатка by Dr. Golomin". Этой утилитой я пользовался примерно 18 лет (2001-2018), за что очень благодарен автору, Евгению Голомину. 
-Утилита у него называлась SNOOP, поэтому я сохранил название.
+## Story
+I have got a peek at the original idea in the "Misprint by Dr. Golomin" utility. I used this utility for about 18 years (2001-2018), for which I am very grateful to the author, Evgeny Golomin.
+His utility was called SNOOP, so I kept the name.
 
-## Как это работает
-Как только Вы обнаружили, что введенный текст оказался в неправильной кодировке, Вам нужно (1) выделить "неправильный" текст и (2) нажать кнопку Break.
-Скрипт (1) перекодирует все символы и (2) определит по первому символу раскладку ввода, и сменит ее на альтернативную (если первый символ выделенного текста был английским, то будет активирована русская раскладка, и наоборот).
-Таблицы перекодировки устроены очень просто:
+## How does it work
+Once you find that the entered text is in the wrong encoding, you need to (1) highlight the "wrong" text and (2) press the Break button.
+The script (1) recodes all characters and (2) detects the input layout (from the first highlighted character) and changes it to an alternative one (if the first character of the selected text was English, then the Russian layout will be activated, and vice versa).
+The lookup tables are very simple:
 
-1. в строке f содержатся все символы английской клавиатуры в порядке их следования при простом последовательном нажатии, если начать из левого верхнего угла QWERTY и двигаться по строкам в направлении правого нижнего угла;
-сначала перечислены все символы верхнего регистра, потом - все символы нижнего регистра;
-2. в строке g в том же порядке перечислены символы русской раскладки.
-3. если приклеить первый массив ко второму (fg=f+g) и второй к первому (gf=g+f), то на одинаковых местах там всегда будут стоять символы-антогонисты;
-поэтому для перекодировки ищем место заменяемого символа в первом массиве fg и по полученному индексу получаем заменяющий символ из второго массива gf.
-
+1. line `f` contains all the characters of the English keyboard in the order they appear on a simple sequential press, if you start from the upper left corner of the QWERTY and move along the lines towards the lower right corner;
+first all uppercase characters are listed, then all lowercase characters;
+2. line `g` lists the symbols of the Russian layout in the same order.
+3. let us concatenate the first array to the second one (`fg=f+g`) and the second one to the first one (`gf=g+f`), then there will always be antagonist characters in the same places;
+therefore for recoding we look for the place of the replaced character in the first array `fg` and, using the obtained index, we get the replacement character from the second array `gf`.
 ```
 static f := "QWERTYUIOP{}ASDFGHJKL:""|ZXCVBNM<>?qwertyuiop[]asdfghjkl;'\zxcvbnm,./``~!@#$`%^&"
 static g := "ЙЦУКЕНГШЩЗХЪФЫВАПРОЛДЖЭ/ЯЧСМИТЬБЮ,йцукенгшщзхъфывапролджэ\ячсмитьбю.ёЁ!""№;`%:?"
 fg = %f%%g%
 gf = %g%%f%
 ```
-## Ограничения
-В репозитории файл AHK выложен в кодировке utf-8. 
-В скрипте все символы национальной (русской) раскладки перечислены явно, поэтому для правильной работы скрипта перед компиляцией его нужно преобразовать в кодировку ANSI. 
-(Репозиторий github требует перекодировки текстовых файлов в utf-8, иначе они некорректно отображаются в интернет-браузере). 
-У меня в системе Windows в качестве ANSI использована кодировка cp1251. 
-Для правльного скачивания/конвертации можно воспользоваться утилитой iconv (https://mlocati.github.io/articles/gettext-iconv-windows.html).
-У меня настроен для репозитория фильтр в файле .git\config:
+## Restrictions
+In the repository the AHK file is laid out in utf-8 encoding.
+In the script, all symbols of the national (Russian) layout are listed explicitly, so for the script to be compiled correctly it must be converted to ANSI encoding.
+(The github repository requires text files to be converted to utf-8, otherwise they will not display correctly in the Internet browser).
+I have cp-1251 encoding as ANSI on my Windows system.
+For proper download/conversion, you can use the iconv utility (https://mlocati.github.io/articles/gettext-iconv-windows.html).
+I have a filter configured for the repository in the `.git\config` file:
 
 ```
 [filter "wincp1251"]
@@ -51,20 +58,20 @@ gf = %g%%f%
         smudge = iconv -f utf-8 -t windows-1251
         required
 ```
-и использование этого фильтра в файле .gitattributes: 
+and the usage of the filter in the `.gitattributes` file: 
 ```
 *.ahk filter=wincp1251
 ```
-## Возможности настройки
-### Другие языки
-Подозреваю, что скрипт с минимальными доработками можно использовать не только для русского, но и для любого другого дополнительного языка (украинского, французского, немецкого и т.д.).
-Для этого нужно:
-1. перед компиляцией обязательно преобразовать скрипт в соответствующую подходящую кодировку Windows (cp-1251, cp-1252, etc.);
-2. исправить в скрипте соответсующую строку g, чтобы в ней в правильном порядке отображались символы национального алфавита
- (_Насколько я понимаю, для украинского и белорусского Windows использует ту же cp-1251, но с другим размещением символов на клавиатуре.)_;
-3. заменить параметры в коде смены раскладки на соответствующие нужному алфавиту (см. строки кода с `SendMessage, 0x50`). 
-### Другие сочетания клавиш
-Конечно же, это сделать легко. Ищите правильные кейкоды для AHK. Использованные коды я подбирал для своего удобства.
-### Другие действия
-Описанным способом можно произвести любую нужную Вам табличную перекодировку (см. в коде примеры с подменой регистра)., 
-а также какую-нибудь экзотическую операцию подмены или пропуска символов (мне по работе часто нужна замена в путях к файлам прямых слешей на обратные, а также "очистка" текста SQL от квадратных скобок). 
+## Customization options
+### Other languages
+I suspect that the script with minimal modifications can be used not only for Russian, but also for any other additional language (Ukrainian, French, German, etc.).
+For this you need:
+1. Before compiling, be sure to convert the script to proper Windows encoding (cp-1251, cp-1252, etc.);
+2. fix the corresponding line `g` in the script so that it displays the characters of the national alphabet in correct order
+ (_As far as I understand, for Ukrainian and Belarusian Windows uses the same cp-1251, but with a different arrangement of characters on the keyboard.)_;
+3. replace the parameters in the layout change code with the ones corresponding to the required alphabet (see code lines with `SendMessage, 0x50`).
+### Other keyboard shortcuts
+Of course, this is easy to do. Look for the right keycodes for AHK. I selected the codes for my convenience.
+### Other actions
+Using the method described you can make any tabular recoding you need (see examples with case substitution in the code),
+as well as some exotic operation of substitution or omission of characters (I often need to replace direct slashes with backslashes in file paths, as well as "cleaning" SQL text from square brackets).
