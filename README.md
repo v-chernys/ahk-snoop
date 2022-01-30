@@ -1,12 +1,4 @@
 # Fixing keyboard layout switching errors (snoop)
-## Назначение
-Иногда программистам приходится активно использовать две раскладки клавиатуры: английскую и русскую. 
-(_Я предпочитаю писать комментарии по-русски. Также, где это возможно, стараюсь и код писать по-русски._)
-При этом часто большой кусок введенного текста оказывается не в той раскладке.
-Приведенный скрипт на языке AutoHotKey мне экономит очень много времени, т.к. позволяет быстро исправить раскладку выделенного текста в любом текстовом редакторе.
-Для перекодировки достаточно выделить текст и нажать клавишу Break.
-Также есть дополнительные опции перекодировки выделенного текста (смена регистра и пр.). Вот полный список преобразований:
-
 ##Purpose
 Sometimes programmers have to simultaneously use two keyboard layouts: English and Russian.
 (_I prefer to write comments in Russian. Also, where it is possible, I try to write code in Russian._)
@@ -17,10 +9,10 @@ There are also additional options for transcoding the selected text (case change
 
 | keyboard shortcut |action |
 | ----- | ----- |
-| Break | replace all English characters with Cyrillic characters and vice versa |
+| Break | replace all English characters with Cyrillic characters and vice versa; set correct layout |
 | Ctrl-Shift-PageUp | change the case of each character to the opposite |
-| Win-PageUp | all characters - uppercase |
-| Win-PageDown | all characters - to lowercase |
+| Win-PageUp | all characters - uppercase; set CapsLock on |
+| Win-PageDown | all characters - to lowercase; set CapsLock off |
 | Alt-Shift-\\ | in the text, replace all right slashes (/) with left slashes (\\) |
 | Alt-Shift-] | remove all square brackets (\[ and \]) in the text |
 
