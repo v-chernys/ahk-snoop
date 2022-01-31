@@ -79,7 +79,7 @@ I suspect that the script with minimal modifications can be used not only for Ru
 For this you need:
 1. Before compiling, be sure to convert the script to proper Windows encoding (cp-1251, cp-1252, etc.);
 2. fix the corresponding line `g` in the script so that it displays the characters of the national alphabet in correct order
- (_As far as I understand, for Ukrainian and Belarusian Windows uses the same cp-1251, but with a different arrangement of characters on the keyboard.)_;
+ (_as far as I understand, for Ukrainian and Belarusian Windows uses the same cp-1251, but with a different arrangement of characters on the keyboard)_;
 3. replace the parameters in the layout change code with the ones corresponding to the required alphabet (see code lines with `SendMessage, 0x50`).
 ### Other keyboard shortcuts
 Of course, this is easy to do. Look for the right keycodes for AHK. I selected the codes for my convenience.
