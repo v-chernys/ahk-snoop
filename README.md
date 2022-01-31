@@ -16,6 +16,21 @@ There are also additional options for transcoding the selected text (case change
 | Alt-Shift-\\ | in the text, replace all right slashes (/) with left slashes (\\) |
 | Alt-Shift-] | remove all square brackets (\[ and \]) in the text |
 
+## System requirements and installation
+
+The script requires Windows 7 or 10 and the installed AutoHotkey v1.1 package (I have v1.1.30.03, visit https://autohotkey.com/ to install AHK).
+To run using the AutoHotkey environment, place the script in any convenient directory (for example, `C:\UTIL\AHK`) and run it with the command:
+```CMD
+start "snoop" "C:\UTIL\AHK\snoop.ahk"
+```
+Аlso I have made an executable EXE file for those who just want to use a working utility and don't want to install AutoHotkey on their system.
+EXE file works on both 32-bit and 64-bit Windows systems. It can be launched, for example, with the following command (from a batch BAT file):
+```CMD
+start "snoop" "C:\UTIL\AHK\snoop.exe"
+```
+To run at system startup, you need to place a link to the executable BAT or EXE file in the folder `"%userprofile%\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup"`.
+I have placed a link there to a special batch file `autoexec.BAT`, which contains the above line.
+
 ## Story
 I have got a peek at the original idea in the "Misprint by Dr. Golomin" utility. I used this utility for about 18 years (2001-2018), for which I am very grateful to the author, Evgeny Golomin.
 His utility was called SNOOP, so I kept the name.
