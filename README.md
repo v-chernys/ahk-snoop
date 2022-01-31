@@ -51,7 +51,7 @@ static g := "ЙЦУКЕНГШЩЗХЪФЫВАПРОЛДЖЭ/ЯЧСМИТЬБЮ,�
 fg = %f%%g%
 gf = %g%%f%
 ```
-## Restrictions
+## Encoding restrictions
 In the repository the AHK file is laid out in utf-8 encoding.
 In the script, all symbols of the national (Russian) layout are listed explicitly, so for the script to be compiled correctly it must be converted to ANSI encoding.
 (The github repository requires text files to be converted to utf-8, otherwise they will not display correctly in the Internet browser).
