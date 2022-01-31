@@ -56,6 +56,7 @@ In the repository the AHK file is laid out in utf-8 encoding.
 In the script, all symbols of the national (Russian) layout are listed explicitly, so for the script to be compiled correctly it must be converted to ANSI encoding.
 (The github repository requires text files to be converted to utf-8, otherwise they will not display correctly in the Internet browser).
 I have cp-1251 encoding as ANSI on my Windows system.
+### Option 1. Use iconv utility
 For proper download/conversion, you can use the iconv utility (https://mlocati.github.io/articles/gettext-iconv-windows.html).
 I have a filter configured for the repository in the `.git\config` file:
 
@@ -69,6 +70,9 @@ and the usage of the filter in the `.gitattributes` file:
 ```
 *.ahk filter=wincp1251
 ```
+### Option 2. Use reserved ZIP archive with correct encoding
+There is an archive `ahk-snoop.zip` inside the repository, it contains the source script `snoop.ahk` in Windows-1251 encoding.
+
 ## Customization options
 ### Other languages
 I suspect that the script with minimal modifications can be used not only for Russian, but also for any other additional language (Ukrainian, French, German, etc.).
