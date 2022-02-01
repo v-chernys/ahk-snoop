@@ -95,5 +95,5 @@ Vladislav Chernyshev
 This project is licensed under the MIT License - see the LICENSE file for details
 
 ## Acknowledgments
-Very greatful to Evgeny Golomin for his "Опечатка by Dr. Golomin" utility. His utility was one of the best and lightweight decisions all around 2000-th and 2010-th. 
-In my script I have used the same approach (highlihting and encoding inside clipboard using static adjustable tables) to resolve problems with keyboard layout.
+I am very greatful to Evgeny Golomin for his "Опечатка by Dr. Golomin" utility. His utility was one of the best and lightweight decisions (to fix keyboard layout switching errors) all around 2000-ths and 2010-ths. 
+In my script I have used the same approach (highlihting and encoding inside clipboard using static adjustable tables).
