@@ -16,8 +16,29 @@ There are also additional options for transcoding the selected text (case change
 | Alt-Shift-\\ | in the text, replace all right slashes (/) with left slashes (\\) |
 | Alt-Shift-] | remove all square brackets (\[ and \]) in the text |
 
-## System requirements and installation
+## How does it work
+Once you find that the entered text is in the wrong encoding, you need to (1) highlight the "wrong" text and (2) press the Break button.
+The script will (1) recode all characters and insert them instead of the selected "wrong" text and 
+(2) determine the input layout (from the first character) and switch it to an alternative one (if the first character of the selected text was English, then the Russian layout will be activated, and vice versa) .
+The selection of proper character is done on the basis of two tables: the first lists all the characters of the English layout in a natural order, the second - in the same order - all the characters of the Russian layout.
+The lookup tables are very simple:
+```AutoHotkey
+static f := "QWERTYUIOP{}ASDFGHJKL:""|ZXCVBNM<>?qwertyuiop[]asdfghjkl;'\zxcvbnm,./``~!@#$`%^&"
+static g := "ЙЦУКЕНГШЩЗХЪФЫВАПРОЛДЖЭ/ЯЧСМИТЬБЮ,йцукенгшщзхъфывапролджэ\ячсмитьбю.ёЁ!""№;`%:?"
+fg = %f%%g%
+gf = %g%%f%
+```
+1. line `f` contains all the characters of the English keyboard in the order they appear on a simple sequential press, if you start from the upper left corner of the QWERTY and move along the lines towards the lower right corner;
+first all uppercase characters are listed, then all lowercase characters;
+2. line `g` lists the symbols of the Russian layout in the same order.
+3. let us concatenate the first array to the second one (`fg=f+g`) and the second one to the first one (`gf=g+f`), then there will always be antagonist characters in the same places;
+therefore for recoding we look for the place of the replaced character in the first array `fg` and, using the obtained index, we get the replacement character from the second array `gf`.
 
+## Story
+I have got a peek at the original idea in the "Опечатка by Dr. Golomin" utility. I used this utility for about 18 years (2001-2018), for which I am very grateful to the author, Evgeny Golomin.
+His utility was called SNOOP, so I kept the name.
+
+## System requirements and installation
 The script requires Windows 7 or 10 and the installed AutoHotkey v1.1 package (I have v1.1.30.03, visit https://autohotkey.com/ to install AHK).
 To run using the AutoHotkey environment, place the script in any convenient directory (for example, `C:\UTIL\AHK`) and run it with the command:
 ```CMD
@@ -31,26 +52,6 @@ start "snoop" "C:\UTIL\AHK\snoop.exe"
 To run at system startup, you need to place a link to the executable BAT or EXE file in the folder `"%userprofile%\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup"`.
 I have placed a link there to a special batch file `autoexec.BAT`, which contains the above line.
 
-## Story
-I have got a peek at the original idea in the "Misprint by Dr. Golomin" utility. I used this utility for about 18 years (2001-2018), for which I am very grateful to the author, Evgeny Golomin.
-His utility was called SNOOP, so I kept the name.
-
-## How does it work
-Once you find that the entered text is in the wrong encoding, you need to (1) highlight the "wrong" text and (2) press the Break button.
-The script (1) recodes all characters and (2) detects the input layout (from the first highlighted character) and changes it to an alternative one (if the first character of the selected text was English, then the Russian layout will be activated, and vice versa).
-The lookup tables are very simple:
-
-1. line `f` contains all the characters of the English keyboard in the order they appear on a simple sequential press, if you start from the upper left corner of the QWERTY and move along the lines towards the lower right corner;
-first all uppercase characters are listed, then all lowercase characters;
-2. line `g` lists the symbols of the Russian layout in the same order.
-3. let us concatenate the first array to the second one (`fg=f+g`) and the second one to the first one (`gf=g+f`), then there will always be antagonist characters in the same places;
-therefore for recoding we look for the place of the replaced character in the first array `fg` and, using the obtained index, we get the replacement character from the second array `gf`.
-```AutoHotkey
-static f := "QWERTYUIOP{}ASDFGHJKL:""|ZXCVBNM<>?qwertyuiop[]asdfghjkl;'\zxcvbnm,./``~!@#$`%^&"
-static g := "ЙЦУКЕНГШЩЗХЪФЫВАПРОЛДЖЭ/ЯЧСМИТЬБЮ,йцукенгшщзхъфывапролджэ\ячсмитьбю.ёЁ!""№;`%:?"
-fg = %f%%g%
-gf = %g%%f%
-```
 ## Encoding restrictions
 In the repository the AHK file is laid out in utf-8 encoding.
 In the script, all symbols of the national (Russian) layout are listed explicitly, so for the script to be compiled correctly it must be converted to ANSI encoding.
@@ -86,3 +87,13 @@ Of course, this is easy to do. Look for the right keycodes for AHK. I selected t
 ### Other actions
 Using the method described you can make any tabular recoding you need (see examples with case substitution in the code),
 as well as some exotic operation of substitution or omission of characters (I often need to replace direct slashes with backslashes in file paths, as well as "cleaning" SQL text from square brackets).
+
+## Author
+Vladislav Chernyshev
+
+## License
+This project is licensed under the MIT License - see the LICENSE file for details
+
+## Acknowledgments
+Very greatful to Evgeny Golomin for his "Опечатка by Dr. Golomin" utility. His utility was one of the best and lightweight decisions all around 2000-th and 2010-th. 
+In my script I have used the same approach (highlihting and encoding inside clipboard using static adjustable tables) to resolve problems with keyboard layout.
