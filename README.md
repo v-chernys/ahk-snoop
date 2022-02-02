@@ -2,7 +2,7 @@
 ## Purpose
 Sometimes programmers have to simultaneously use two keyboard layouts: English and Russian.
 (_I prefer to write comments in Russian. Also, where it is possible, I try to write code in Russian_).
-In the case often it occures that a large piece of the entered text has wrong layout.
+In the case it occures often that a large piece of the entered text has wrong layout.
 The above script in the AutoHotKey language saves me a lot of time, because it allows me to quickly fix the layout of the selected text in any text editor.
 To convert the text from wrong layout just select the text and press the Break key.
 There are also additional options for transcoding the selected text (case change, etc.). Here is the complete list of transformations:
