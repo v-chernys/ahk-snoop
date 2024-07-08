@@ -1,5 +1,5 @@
-; Copyright (c) 2018-2022 Vladislav Chernyshev
-; Copyright (c) 2018-2022 Владислав Чернышев
+; Copyright (c) 2018-2024 Vladislav Chernyshev
+; Copyright (c) 2018-2024 Владислав Чернышев
 ; --------------------------------------------------------------------------------------------------
 ; 2018-12-10, author Vladislav Chernyshev
 ; 2018-12-10, автор Владислав Чернышев
@@ -10,7 +10,20 @@
 ; ==================================================================================================
 ; оригинальная реализация - в утилите "Опечатка by Dr. Golomin"
 ; утилитой пользовался примерно 18 лет (2001-2018), за что очень благодарен автору, Евгению Голомину
+; ---------------------------------------------------------------------------------------
+; Все операции - над  выделенным текстом.
+; Break - сменить раскладку
+; ScrollLock = Ctrl-Shift-PgUp - сменить регистр
+; NumpadAdd = Win-PgUp - все в верхний регистр
+; NumpadSub = Win-PgDn - все в нижний регистр
+; NumpadDiv = Alt-Shift-\ = Ctrl-Shift-\ - слеш-бэкслеш
+; NumpadMult= Alt-Shift-] - убрать все квадратные скобки (очистка SQL)
+; Ctrl-Shift-Space = текст из VK-Teams > очистка 2023-07-12
+; Ctrl-Shift-` = подставить гласные с ударениями
+; ---------------------------------------------------------------------------------------
 ; 2022-01-30 - публикация на github
+; 2024-03-19 = ^Delete / ^Backspace - перекодировка для ноута с Win 11
+; 2024-05-12 > две кнопки мыши = {LWin}{Shift}S для Win 11
 
 #SingleInstance force
 #NoEnv  ; Recommended for performance and compatibility with future AutoHotkey releases.
@@ -18,16 +31,45 @@
 SendMode Input  ; Recommended for new scripts due to its superior speed and reliability.
 SetWorkingDir %A_ScriptDir%  ; Ensures a consistent starting directory.
 StringCaseSense, On
- 
- 
+
+; 2024-05-12 > две кнопки мыши = {LWin}{Shift}S для Win 11
+~LButton & RButton:: 
+~RButton & LButton:: 
+	if (A_USERNAME <> "v253323") 
+		exit
+	SendInput {LWin Down}{LShift Down}s{LWin Up}{LShift Up}
+	return
+
+^+Space::		; 2023-07-12 = текст из VK-Teams > очистка
+{
+;   If WinActive("ahk_class NOTES")
+;		Отправить2Альта("TYN","TYЧ")	; выбрать стиль "[None]"/"Чат"
+
+	TempClipboard := ClipboardAll		; push
+   Clipboard =
+   Отправить_Contol_C()
+   StringReplace, Clipboard, Clipboard, :`r`n, :`t, All
+   Loop
+   { 
+	    StringReplace, Clipboard, Clipboard, `r`n`r`n, `r`n, UseErrorLevel
+		if (ErrorLevel = 0)  ; No more replacements needed.
+        break
+   }
+   Отправить_Contol_V()
+   Clipboard := TempClipboard 			; pop
+   EXIT
+}
+
 Break::
+^Delete::
+^Backspace::
 ;2020-04-08 #Break::	; 2020-04-03
 ;2020-04-08 ^+Backspace::   ; 2020-04-03
 {
+;	SendMode InputThenPlay
    TempClipboard := ClipboardAll		; push
    Clipboard =
-   SendInput, ^{vk43}				; Ctrl + C
-   ClipWait, 0
+   Отправить_Contol_C()
    новый := ""
    Loop, parse, clipboard
    { 
@@ -56,10 +98,8 @@ Break::
 
 ;  Send,%новый% ; так почему-то не подменяет № на #
 ;  заменяю 
-   Clipboard := новый
-   SendInput, ^{vk56}				; Ctrl + v
-   ClipWait, 0
-   Sleep, 200
+	Clipboard := новый
+   Отправить_Contol_V()
    Clipboard := TempClipboard 			; pop
    EXIT
 
@@ -70,8 +110,7 @@ ScrollLock::	; 2019-01-18
 
 	TempClipboard := ClipboardAll		; push
 	Clipboard =
-	SendInput, ^{vk43}			; Ctrl + C
-	ClipWait, 0
+	Отправить_Contol_C()
 	новый := ""
 	Loop, parse, clipboard
 	{ 
@@ -80,9 +119,7 @@ ScrollLock::	; 2019-01-18
 	}
 ;	переключить_КАПС_ЛОК()
 	Clipboard := новый
-	SendInput, ^{vk56}			; Ctrl + v
-	ClipWait, 0
-   Sleep, 200
+	Отправить_Contol_V()
 	Clipboard := TempClipboard 		; pop
 	return
 }
@@ -92,8 +129,7 @@ NumpadAdd::
 
 	TempClipboard := ClipboardAll		; push
 	Clipboard =
-	SendInput, ^{vk43}			; Ctrl + C
-	ClipWait, 0
+	Отправить_Contol_C()
 	новый := ""
 	Loop, parse, clipboard
 	{ 
@@ -101,9 +137,7 @@ NumpadAdd::
 		новый:= новый з
 	}
 	Clipboard := новый
-	SendInput, ^{vk56}			; Ctrl + v
-	ClipWait, 0
-	Sleep, 200
+	Отправить_Contol_V()
 	Clipboard := TempClipboard 		; pop
 ;	MsgBox, 1
 	установить_КАПС_ЛОК(True)
@@ -115,8 +149,7 @@ NumpadSub::
 
 	TempClipboard := ClipboardAll		; push
 	Clipboard =
-	SendInput, ^{vk43}			; Ctrl + C
-	ClipWait, 0
+	Отправить_Contol_C()
 	новый := ""
 	Loop, parse, clipboard
 	{ 
@@ -124,9 +157,7 @@ NumpadSub::
 		новый:= новый з
 	}
 	Clipboard := новый
-	SendInput, ^{vk56}			; Ctrl + v
-	ClipWait, 0
-	Sleep, 200
+	Отправить_Contol_V()
 	Clipboard := TempClipboard 		; pop
 ;	MsgBox, 0
 	установить_КАПС_ЛОК(False)
@@ -139,8 +170,7 @@ NumpadDiv::
 {
 	TempClipboard := ClipboardAll		; push
 	Clipboard =
-	SendInput, ^{vk43}			; Ctrl + C
-	ClipWait, 0
+	Отправить_Contol_C()
 	новый := ""
 	Loop, parse, clipboard
 	{ 
@@ -148,9 +178,7 @@ NumpadDiv::
 		новый:= новый з
 	}
 	Clipboard := новый
-	SendInput, ^{vk56}			; Ctrl + v
-	ClipWait, 0
-   Sleep, 200
+	Отправить_Contol_V()
 	Clipboard := TempClipboard 		; pop
 	return
 }
@@ -160,8 +188,7 @@ NumpadMult::
 {
 	TempClipboard := ClipboardAll		; push
 	Clipboard =
-	SendInput, ^{vk43}			; Ctrl + C
-	ClipWait, 0
+	Отправить_Contol_C()
 	новый := ""
 	Loop, parse, clipboard
 	{ 
@@ -169,17 +196,26 @@ NumpadMult::
 		новый:= новый з
 	}
 	Clipboard := новый
-	SendInput, ^{vk56}			; Ctrl + v
-	ClipWait, 0
-   Sleep, 200
+	Отправить_Contol_V()
 	Clipboard := TempClipboard 		; pop
 	return
 }
+
+; >>> подставить знак ударения
+#sc021:: ; Alt-a' при любой раскладке 2024-01-25
+{
+	
+;	SendInput, {Alt Down}{Numpad0}{Numpad7}{Numpad6}{Numpad9}{Alt Up}
+;	SendInput, {Alt Down}{Numpad0}{Numpad9}{Alt Up}
+	SendInput, {Alt Down}{Numpad0}{Numpad2}{Numpad2}{Numpad5}{Alt Up} ; a
+	return
+}
+
 eng_rus(символ)
 {
 
-static f := "QWERTYUIOP{}ASDFGHJKL:""|ZXCVBNM<>?qwertyuiop[]asdfghjkl;'\zxcvbnm,./``~!@#$`%^&"
-static g := "ЙЦУКЕНГШЩЗХЪФЫВАПРОЛДЖЭ/ЯЧСМИТЬБЮ,йцукенгшщзхъфывапролджэ\ячсмитьбю.ёЁ!""№;`%:?"
+static f := "QWERTYUIOP{}ASDFGHJKL:""|ZXCVBNM<>?qwertyuiop[]asdfghjkl;'\zxcvbnm,./``~!@#$`%^&‘”“"
+static g := "ЙЦУКЕНГШЩЗХЪФЫВАПРОЛДЖЭ/ЯЧСМИТЬБЮ,йцукенгшщзхъфывапролджэ\ячсмитьбю.ёЁ!""№;`%:?эЭЭ"
 ff = %f%%g%
 gg = %g%%f%
 место := InStr(ff, символ, CaseSensitive := true)
@@ -242,6 +278,7 @@ if место then
 	return % SubStr(g,место,1)
 return символ
 }
+
 переключить_КАПС_ЛОК()	; 2019-02-14
 {
 	state := GetKeyState("CapsLock", "T")  ; 1 if CapsLock is ON, 0 otherwise.
@@ -290,4 +327,40 @@ return символ
   else ; if(InputLocaleID=Locale1)
     SendMessage, 0x50,, % Locale1,, A
   return	
+}
+
+; ---------------------------------------------------------------------------------------
+ОтправитьАльт0(набор="tln") ; 2020-05-04
+{
+	SendInput {Alt Down}
+	sendinput {Raw}%набор%
+	SendInput {Alt Up}	
+;	exit ; чтобы отправить потом вторую последовательность
+}
+ОтправитьАльт(набор="tln") ; 2020-04-27
+{
+	ОтправитьАльт0(набор)	
+	exit
+}
+Отправить2Альта(набор1, набор2) ; 2020-05-04
+{
+	ОтправитьАльт0(набор1)	
+	ОтправитьАльт0(набор2)	
+;	exit
+}
+; ---------------------------------------------------------------------------------------
+Отправить_Contol_C()
+{
+;   SendInput, ^{vk43}				; Ctrl + C
+    SendInput, {LCtrl Down}{vk43}{LCtrl Up}
+	ClipWait, 1
+	Sleep, 200
+}	
+ 
+Отправить_Contol_V()
+{
+ ;   SendInput, ^{vk56}				; Ctrl + v
+    SendInput, {LCtrl Down}{vk56}{LCtrl Up}
+	ClipWait, 1
+	Sleep, 200
 }
